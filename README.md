@@ -198,7 +198,7 @@ If your editor complains about Three example modules, keep minimal decls in `src
 
   * AA off, DPR cap (≤1.25), throttle hand detection (\~15 Hz), downsample big PLY (≤30k), skip hover raycasts on splats, optional `AdditiveBlending` for splats.
 
-## 🧪 Demo Script (for presentation)
+## 🧪 Demo 
 
 1. Webcam HUD → open hand / pinch → label updates.
 2. **DamagedHelmet** → hover highlight → **pinch-drag**.
