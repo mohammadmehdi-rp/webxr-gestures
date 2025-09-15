@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebXR Gestures</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        font-family: system-ui, Segoe UI, Roboto, Arial;
+      }
+      #left {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 32%;
+        height: 100%;
+        background: #0f1115;
+        color: #e7e7e7;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+      #right {
+        position: fixed;
+        left: 32%;
+        top: 0;
+        width: 68%;
+        height: 100%;
+        background: #0a0c10;
+      }
+      #panel {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .chip {
+        background: #1a1f2b;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      #videoWrap {
+        position: relative;
+      }
+      video {
+        width: 100%;
+        border-radius: 12px;
+        background: #000;
+        display: block;
+      }
+      canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        border-radius: 12px;
+      }
+      #hud {
+        margin-top: 8px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      #status {
+        font-weight: 600;
+      }
+      button {
+        color: white;
+      }
+      a {
+        color: #9ecbff;
+        text-decoration: none;
+      }
+      #xrExit {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 9999;
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid #2c3342;
+        background: rgba(20, 22, 28, 0.92);
+        color: #e7e7e7;
+        font: 13px/1 system-ui;
+        display: none;
+        cursor: pointer;
+      }
+      /* existing: #right is 68% wide for desktop */
+      #right {
+        position: fixed;
+        left: 32%;
+        top: 0;
+        width: 68%;
+        height: 100%;
+        background: #0a0c10;
+      }
+
+      /* when XR is active: take the whole screen and hide the left pane */
+      body.xr-active #right {
+        left: 0;
+        width: 100%;
+      }
+      body.xr-active #left {
+        display: none;
+      }
+      body.xr-active {
+        overflow: hidden;
+      } /* avoid scrollbars */
+      canvas {
+        display: block;
+      } /* remove tiny gaps from inline canvas */
+    </style>
+  </head>
+  <body>
+    <div id="left">
+      <h3 style="margin: 6px 0 10px">Webcam + Hand Landmarks</h3>
+      <div id="videoWrap">
+        <video id="webcam" autoplay playsinline muted></video>
+        <canvas id="overlay"></canvas>
+      </div>
+      <div id="panel">
+        <span class="chip">FPS: <span id="fps">—</span></span>
+        <span class="chip">Resolution: <span id="res">—</span></span>
+        <span class="chip">Camera: <span id="cam">—</span></span>
+      </div>
+      <div id="hud">
+        <span id="status" class="chip">Initializing…</span>
+        <span class="chip">Hands: <span id="hands">0</span></span>
+      </div>
+      <div style="margin-top: 10px">
+        <label class="chip" style="cursor: pointer">
+          Load mesh…
+          <input
+            id="file"
+            type="file"
+            accept=".glb,.gltf,.obj,.ply,.mtl,.png,.jpg,.jpeg,.ktx2"
+            multiple
+            style="display: none"
+          />
+        </label>
+        <button id="btnFit" class="chip" style="cursor: pointer; border: none">
+          Fit view
+        </button>
+        <button id="btnCube" class="chip" style="cursor: pointer; border: none">
+          Reset cube
+        </button>
+        <div style="margin-top: 10px">
+          <label class="chip" style="cursor: pointer">
+            Load Splats (JSON/PLY)…
+            <input
+              id="splatFile"
+              type="file"
+              accept=".json,.ply"
+              style="display: none"
+            />
+          </label>
+          <button
+            id="sampleSplats"
+            class="chip"
+            style="cursor: pointer; border: none"
+          >
+            Sample Splats
+          </button>
+          <span class="chip"
+            >σ(px):
+            <input
+              id="sigma"
+              type="range"
+              min="0.2"
+              max="1.8"
+              step="0.05"
+              value="0.9"
+          /></span>
+          <span class="chip" style="margin-top: 12px"
+            >Opacity:
+            <input
+              style="margin-top: 12px"
+              id="sOpacity"
+              type="range"
+              min="0.1"
+              max="1.0"
+              step="0.05"
+              value="0.9"
+          /></span>
+        </div>
+        <div style="margin-top: 8px">
+          <div style="font-size: 12px; opacity: 0.8; margin-bottom: 4px">
+            Samples:
+          </div>
+          <button
+            id="sampleHelmet"
+            class="chip"
+            style="cursor: pointer; border: none"
+          >
+            DamagedHelmet (GLB)
+          </button>
+          <button
+            id="sampleFox"
+            class="chip"
+            style="cursor: pointer; border: none"
+          >
+            Fox (glTF)
+          </button>
+          <button
+            id="sampleBunny"
+            class="chip"
+            style="cursor: pointer; border: none"
+          >
+            Stanford Bunny (PLY)
+          </button>
+        </div>
+        <div style="font-size: 12px; opacity: 0.7; margin-top: 6px">
+          Tip: drag & drop a file onto the 3D view.
+        </div>
+      </div>
+      <div style="margin-top: 8px; font-size: 12px; opacity: 0.8">
+        Uses MediaPipe Tasks (CDN): @latest/wasm & hand_landmarker.task
+      </div>
+    </div>
+    <div id="right">
+      <!-- Three.js / WebXR canvas will go here in later steps -->
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
