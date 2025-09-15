@@ -207,7 +207,7 @@ If your editor complains about Three example modules, keep minimal decls in `src
 5. **Enter VR** → controller grab → enable **hand tracking** → pinch-grab; two-hand scale/rotate.
 6. **Exit VR**.
 
-## 📚 References (IEEE style)
+## 📚 References 
 
 \[1] B. Kerbl, G. Kopanas, T. Leimkühler, and G. Drettakis, “3D Gaussian Splatting for Real-Time Radiance Field Rendering,” *ACM Trans. Graph.*, vol. 42, no. 4, 2023.
 \[2] W3C Immersive Web WG, “WebXR Device API,” *W3C Rec/WD*, 2025.
