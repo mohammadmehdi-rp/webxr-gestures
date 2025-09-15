@@ -2,7 +2,6 @@
 
 A browser app that lets you manipulate 3D content with **hand gestures** (webcam), **VR controllers**, and **XR hand-tracking pinches**. Supports standard meshes (**GLB/GLTF**, **OBJ+MTL+textures**, **PLY**) and a lightweight **Gaussian splats** viewer (JSON & PLY). Built with **Three.js**, **WebXR**, and **MediaPipe Hands**—fully client-side.
 
----
 
 ## ✨ Features
 
@@ -20,8 +19,6 @@ A browser app that lets you manipulate 3D content with **hand gestures** (webcam
   * **Controller grab** (trigger/squeeze)
   * **XR hand pinch-grab** (Quest); optional **two-hand pinch** to scale/rotate
 * **Performance**: AA off, DPR cap, throttled landmark inference, PLY downsample, raycast throttling
-
----
 
 ## 🧱 Project Structure
 
@@ -45,8 +42,6 @@ public/
     bunny.ply           # (put your local copy here)
 index.html, style.css, main.ts, vite.config.ts, tsconfig.json
 ```
-
----
 
 ## 🚀 Quick Start
 
@@ -97,8 +92,6 @@ renderer.xr.setSessionInit({
 });
 ```
 
----
-
 ## 🎮 How to Use
 
 ### Desktop (webcam)
@@ -113,8 +106,6 @@ renderer.xr.setSessionInit({
 * **Controllers:** **trigger/squeeze** to grab/release the model.
 * **Hands (Quest):** **pinch** to grab; *(optional)* **two-hand pinch** → scale by distance, rotate by yaw twist.
 * **Exit VR:** “Exit VR (Esc)” button, **Esc**, or the VRButton toggle.
-
----
 
 ## 🧪 No-Headset Testing (WebXR Emulator Plugin)
 
@@ -138,8 +129,6 @@ You can exercise VR paths without a headset using a DevTools extension.
 
 **Notes:** Emulators approximate poses/latency; hand emulation varies. Disable the emulator when testing on real hardware.
 
----
-
 ## 📦 Loading Assets
 
 * **Sample buttons:** Helmet (GLB), Fox (GLTF), Bunny (PLY/local).
@@ -150,8 +139,6 @@ You can exercise VR paths without a headset using a DevTools extension.
   * **PLY**: loads as mesh via `loadAny(...)`; or as **splats** via *Load Splats…*.
 
 > If a remote URL 404s/CORS-blocks, copy files into **`/public/models/`** and load via `/models/...`.
-
----
 
 ## 🌈 Gaussian Splats (JSON format)
 
@@ -171,8 +158,6 @@ You can exercise VR paths without a headset using a DevTools extension.
 * Use **σ** and **Opacity** sliders to tune softness/accumulation.
 * For PLY as splats: load via *Load Splats…* (downsamples for performance).
 
----
-
 ## ⚙️ Configuration (tweak points)
 
 * **Hand tracking rate:** `detectIntervalMs` in `hands.ts` (\~66 ms → \~15 Hz).
@@ -185,8 +170,6 @@ You can exercise VR paths without a headset using a DevTools extension.
 * **PLY downsample (splats):** `MAX_POINTS` in `loadSplat.ts` (e.g., 30k).
 * **Cursor flip:** `FLIP_X` in `main.ts` if webcam feels mirrored.
 
----
-
 ## 🧩 Type Shims
 
 If your editor complains about Three example modules, keep minimal decls in `src/types/three-examples.d.ts` for:
@@ -195,8 +178,6 @@ If your editor complains about Three example modules, keep minimal decls in `src
 * `VRButton`, `XRHandModelFactory`
 
 > Remove shims when your Three version includes these typings to avoid duplicates.
-
----
 
 ## 🛠️ Troubleshooting
 
@@ -217,8 +198,6 @@ If your editor complains about Three example modules, keep minimal decls in `src
 
   * AA off, DPR cap (≤1.25), throttle hand detection (\~15 Hz), downsample big PLY (≤30k), skip hover raycasts on splats, optional `AdditiveBlending` for splats.
 
----
-
 ## 🧪 Demo Script (for presentation)
 
 1. Webcam HUD → open hand / pinch → label updates.
@@ -227,8 +206,6 @@ If your editor complains about Three example modules, keep minimal decls in `src
 4. **Sample Splats** → adjust σ/opacity; drag cloud.
 5. **Enter VR** → controller grab → enable **hand tracking** → pinch-grab; two-hand scale/rotate.
 6. **Exit VR**.
-
----
 
 ## 📚 References (IEEE style)
 
@@ -240,15 +217,11 @@ If your editor complains about Three example modules, keep minimal decls in `src
 \[6] Khronos, “glTF 2.0 Specification,” 2021.
 \[7] G. Turk, “The PLY Polygon File Format,” 1994.
 
----
-
 ## 📝 License & Attribution
 
 * Include licenses for any third-party models in `/public/models/`.
 * glTF Sample Models carry permissive licenses (see their repo).
 * This template’s code is intended for academic coursework—cite appropriately.
-
----
 
 ## ✉️ Acknowledgments
 
